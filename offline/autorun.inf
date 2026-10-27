@@ -1,0 +1,9 @@
+[AutoRun]
+open=open-museum.bat
+icon=museum.ico
+label=Our Private Museum
+action=Open Our Private Museum
+shell\open\command=open-museum.bat
+
+; Windows 10/11 usually ignores AutoRun on USB drives for security.
+; Keep this file for older systems; see 使用说明.txt for reliable methods.

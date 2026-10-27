@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="s95" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f7ece2"/><stop offset="100%" stop-color="#e5c3ab"/>
+    </linearGradient>
+    <linearGradient id="g95" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c99a7e"/><stop offset="100%" stop-color="#6e4c3c"/>
+    </linearGradient>
+    <radialGradient id="o95" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff4e2" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#fff4e2" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="n95"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".05"/></feComponentTransfer></filter>
+    <filter id="b95" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#s95)"/>
+  <rect x="180" y="150" width="440" height="330" rx="10" fill="#fff4e2" opacity=".24"/>
+  <rect x="180" y="150" width="440" height="330" rx="10" fill="none" stroke="#6e4c3c" stroke-width="9"/>
+  <rect x="210" y="190" width="170" height="130" rx="6" fill="#c99a7e" opacity=".5"/>
+  <rect x="420" y="190" width="170" height="130" rx="6" fill="#e5c3ab" opacity=".7"/>
+  <g fill="#fff4e2"><rect x="228" y="212" width="34" height="26" rx="4"/><rect x="276" y="212" width="34" height="26" rx="4"/>
+  <rect x="228" y="258" width="34" height="26" rx="4"/><rect x="276" y="258" width="34" height="26" rx="4"/>
+  <rect x="440" y="212" width="34" height="26" rx="4"/><rect x="488" y="212" width="34" height="26" rx="4"/></g>
+  <rect x="330" y="380" width="140" height="100" rx="8" fill="#6e4c3c" opacity=".6"/>
+  <circle cx="400" cy="430" r="20" fill="#fff4e2" opacity=".9"/>
+  <rect width="800" height="600" filter="url(#n95)"/>
+</svg>

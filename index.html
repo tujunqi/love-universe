@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  我们的恋爱纪念宇宙 · 主页面
+  ------------------------------------------------------------
+  ★ 新手只需要改一个文件：js/main.js 顶部的 CONFIG
+    · 改名字、恋爱开始日期、生日、密码 → CONFIG 第 1 段
+    · 换封面图 / 照片墙照片 → CONFIG.photos 与 CONFIG.coverSlides
+    · 加情话、改默契题 → CONFIG.quotes 与 CONFIG.quiz
+    · 改时间线节点 → CONFIG.timeline
+  ★ 本文件不用懂：全部文案标题也可以直接在页面里搜索中文后替换。
+  ★ 三套皮肤：温柔粉（rose）/ 夜空蓝（night）/ 复古棕（retro）
+  ============================================================
+-->
+<html lang="zh-CN" data-theme="rose">
+<head>
+  <meta charset="UTF-8">
+  <!-- 手机端按设备宽度渲染，禁止用户手动缩放导致布局错乱 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#fff8f6" id="themeColorMeta">
+  <meta name="description" content="一个只属于我们的恋爱数字纪念宇宙。">
+  <!-- 一句标题，浏览器标签页会显示它；可以改成你们的名字 -->
+  <title>我们的恋爱纪念宇宙 · 小满 &amp; 阿星</title>
+  <!-- PWA：安装成 App（安卓可装应用、iPhone 可加到主屏幕） -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="纪念宇宙">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- 这段小脚本只做一件事：告诉 CSS“浏览器支持 JS”。
+       万一 JS 出错，动画元素也不会永远隐藏，内容依然能看。 -->
+  <script>
+    document.documentElement.classList.add('js');
+    /* 在页面绘制前先恢复上次选的主题，避免打开瞬间闪一下粉色 */
+    try {
+      var savedTheme = localStorage.getItem('loveUniverse.v1.theme');
+      if (savedTheme) document.documentElement.dataset.theme = JSON.parse(savedTheme);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+
+  <!-- ===== 全屏装饰层：光晕、星屑、胶片颗粒、鼠标点击粒子 ===== -->
+  <div class="ambient" aria-hidden="true">
+    <span class="ambient-blob blob-1"></span>
+    <span class="ambient-blob blob-2"></span>
+    <span class="ambient-blob blob-3"></span>
+  </div>
+  <canvas id="fxCanvas" class="fx-canvas" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- 页面滚动进度条，最顶端一条极细的渐变线 -->
+  <div class="scroll-progress" aria-hidden="true"><span id="scrollProgress"></span></div>
+
+  <!-- ===== 顶部导航：主题切换、背景音乐、板块跳转 ===== -->
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#cover" aria-label="回到封面">
+      <!-- 首字母由 JS 写入，对应你们的名字 -->
+      <span class="brand-initial" id="brandMe">A</span>
+      <span class="brand-heart" aria-hidden="true">♥</span>
+      <span class="brand-initial" id="brandPartner">B</span>
+    </a>
+
+    <nav class="main-nav" aria-label="页面板块">
+      <a href="#gallery" data-nav="gallery">照片</a>
+      <a href="#timeline" data-nav="timeline">时间线</a>
+      <a href="#bucket" data-nav="bucket">清单</a>
+      <a href="#play" data-nav="play">互动</a>
+      <a href="#messages" data-nav="messages">留言</a>
+    </nav>
+
+    <div class="top-actions">
+      <!-- 安装成 App：浏览器支持时自动出现 -->
+      <button type="button" class="icon-btn" id="installBtn" aria-label="安装成应用" title="安装到桌面，像 App 一样使用" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>
+        </svg>
+      </button>
+
+      <!-- ⚙ 设置面板：改名字、日期、照片、题目、信，全在这里，不用碰代码 -->
+      <button type="button" class="icon-btn" id="settingsBtn" aria-label="个性化设置" title="改成你们的：名字、照片、题目、信">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.4"/>
+          <path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l2-1.6-1.9-3.2-2.4 1a7.6 7.6 0 0 0-2.6-1.5L14 2.5h-4l-.5 2.7a7.6 7.6 0 0 0-2.6 1.5l-2.4-1-1.9 3.2 2 1.6a7.6 7.6 0 0 0 0 3l-2 1.6 1.9 3.2 2.4-1a7.6 7.6 0 0 0 2.6 1.5l.5 2.7h4l.5-2.7a7.6 7.6 0 0 0 2.6-1.5l2.4 1 1.9-3.2Z"/>
+        </svg>
+      </button>
+
+      <!-- 主题切换：data-theme-value 对应 CSS 里的三套主题 -->
+      <div class="theme-switch" role="group" aria-label="切换主题皮肤">
+        <button type="button" class="theme-dot dot-rose" data-theme-value="rose" aria-label="温柔粉主题" aria-pressed="true" title="温柔粉"><span></span></button>
+        <button type="button" class="theme-dot dot-night" data-theme-value="night" aria-label="夜空蓝主题" aria-pressed="false" title="夜空蓝"><span></span></button>
+        <button type="button" class="theme-dot dot-retro" data-theme-value="retro" aria-label="复古棕主题" aria-pressed="false" title="复古棕"><span></span></button>
+      </div>
+
+      <!-- 背景音乐按钮：默认不自动播放，点击才播放（浏览器安全策略） -->
+      <button type="button" class="music-btn" id="musicToggle" aria-label="播放背景音乐" aria-pressed="false" title="播放我们的歌">
+        <span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ========================================================
+         板块 0 · 封面
+         · 标题中的天数、倒计时、名字全部由 JS 自动计算
+         · 背景图在 js/main.js 的 CONFIG.coverSlides 里替换
+         ======================================================== -->
+    <section class="cover" id="cover">
+      <!-- 背景照片层：JS 会插入 <img>，自动淡入淡出轮播 -->
+      <div class="cover-slides" id="coverSlides" aria-hidden="true"></div>
+      <!-- 压暗与柔光遮罩，保证文字在任何照片上都看得清 -->
+      <div class="cover-veil" aria-hidden="true"></div>
+      <div class="cover-vignette" aria-hidden="true"></div>
+      <p class="cover-drop-hint" id="coverDropHint" aria-hidden="true">松手，把它放成封面</p>
+
+      <div class="cover-inner">
+        <p class="eyebrow cover-eyebrow">
+          FOR <span id="coverPartner">小满</span> · FROM <span id="coverMe">阿星</span>
+        </p>
+
+        <!-- 标题：数字“第 X 天”会自动更新，点击标题 5 次有一个小提示彩蛋 -->
+        <h1 class="cover-title" id="coverTitle">
+          我们的第 <span class="day-number" id="dayNumber">1</span> 天
+        </h1>
+
+        <!-- 封面专属情话：在 CONFIG.coverQuote 里改成只属于你们的一句 -->
+        <p class="cover-quote" id="coverQuote">日子是普通的，和你在一起的那部分，闪闪发光。</p>
+
+        <!-- 两个实时计时器：相恋时长 + 下一个纪念日倒计时 -->
+        <div class="cover-stats">
+          <div class="stat-card">
+            <span class="stat-label">我们已经在一起</span>
+            <div class="stat-value">
+              <span class="stat-big" id="elapsedDays">0</span><span class="stat-unit">天</span>
+              <span class="stat-clock" id="elapsedClock">00:00:00</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-label" id="anniversaryLabel">距离纪念日</span>
+            <div class="stat-value">
+              <span class="stat-big" id="anniversaryDays">0</span><span class="stat-unit">天</span>
+              <span class="stat-clock" id="anniversaryClock">00:00:00</span>
+            </div>
+          </div>
+
+          <!-- 点击按钮：心跳动画 + 粒子 + 计数 + 随机情话 -->
+          <div class="heart-card">
+            <button type="button" class="heart-btn" id="heartBtn" aria-label="点亮一次心动">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M32 56S7 42.5 7 22.5C7 12.7 14.7 6 23 6c4.6 0 8.2 2.3 9 5.6C32.8 8.3 36.4 6 41 6c8.3 0 16 6.7 16 16.5C57 42.5 32 56 32 56Z" />
+              </svg>
+            </button>
+            <p class="heart-copy">轻触这颗心<br><span id="heartCount">0</span> 次心动被收藏</p>
+          </div>
+        </div>
+
+        <!-- 封面照片工具：换当前这张封面，或把它还原成默认 -->
+        <div class="cover-photo-tools" id="coverPhotoTools">
+          <label class="cover-chip" id="coverEditBtn" for="coverFileInput" role="button" tabindex="0">换这张封面</label>
+          <button type="button" class="cover-chip cover-chip-quiet" id="coverResetBtn" hidden>还原默认</button>
+        </div>
+
+        <a class="scroll-cue" href="#gallery">
+          <span>往下走，去看我们的故事</span>
+          <i aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <!-- 左下角的小字：在一起的第一天；右下角是轮播编号 -->
+      <p class="cover-since">SINCE <span id="sinceDate">2023.05.20</span></p>
+      <p class="cover-index" id="coverIndex">01 / 03</p>
+    </section>
+
+    <!-- ========================================================
+         板块 1 · 照片墙
+         瀑布流由 JS 根据 CONFIG.photos 自动生成
+         预置 100 个位置，点击任意照片可放大查看，支持键盘左右键
+         ======================================================== -->
+    <section class="section section-gallery" id="gallery">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span class="index-num">01</span> / GALLERY</p>
+          <h2>把日子，<em>一张张存起来</em></h2>
+          <p class="section-lede">
+            照片会褪色，但按下快门那一刻的心动不会。这里先放 100 个位置，
+            把奶茶、便利店、散步、重要日子和还没发生的小事都慢慢填满。
+          </p>
+          <p class="section-note"><span id="photoCount">100</span> 个瞬间 · 点击查看大图 · 拖照片进相框就能换</p>
+        </header>
+
+        <!-- JS 会在这里生成分类筛选和 <figure class="photo-item"> 瀑布流 -->
+        <div class="photo-filters" id="photoFilters" role="group" aria-label="照片分类"></div>
+        <div class="masonry" id="photoWall"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         板块 2 · 时间线
+         节点在 CONFIG.timeline 中修改；支持增加/删减任意条
+         ======================================================== -->
+    <section class="section section-timeline" id="timeline">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span class="index-num">02</span> / TIMELINE</p>
+          <h2>我们走过的，<em>每一个坐标</em></h2>
+          <p class="section-lede">
+            相识、心动、在一起、第一次远行……大事件不必多，
+            它们只是提醒我们：原来已经一起走了这么远。
+          </p>
+        </header>
+
+        <div class="timeline" id="timelineList">
+          <!-- JS 生成纵向时间轴 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         板块 2.5 · 恋爱清单
+         想一起完成的小事，可以打勾、新增、删除，保存在本机
+         ======================================================== -->
+    <section class="section section-bucket" id="bucket">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span class="index-num">02.5</span> / BUCKET LIST</p>
+          <h2>想和你一起，<em>完成的 100 件小事</em></h2>
+          <p class="section-lede">
+            不用很隆重。一起喝一家新奶茶、一起走一条没走过的路、一起把一句“下次吧”变成“就今天”。
+          </p>
+          <p class="section-note"><span id="bucketDone">0</span> / <span id="bucketTotal">0</span> 件已经一起完成</p>
+        </header>
+
+        <div class="bucket-progress reveal" aria-hidden="true">
+          <span id="bucketProgressFill"></span>
+        </div>
+
+        <form class="bucket-add reveal" id="bucketForm" autocomplete="off">
+          <label class="sr-only" for="bucketInput">添加一件想一起做的事</label>
+          <input type="text" id="bucketInput" maxlength="36" placeholder="想一起做的一件小事，比如：凌晨去便利店吃关东煮">
+          <button type="submit" class="btn btn-primary">加进清单</button>
+        </form>
+
+        <ul class="bucket-list reveal" id="bucketList"></ul>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         板块 3 · 互动游戏
+         ① 心动抽卡：50 句情话随机抽
+         ② 默契大考验：5 道题，答完给分数和评语
+         ======================================================== -->
+    <section class="section section-play" id="play">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span class="index-num">03</span> / PLAY</p>
+          <h2>把喜欢，<em>玩成一件小事</em></h2>
+          <p class="section-lede">
+            抽一张今天的签，或者来一场只有我们懂的默契考试。
+            没有标准答案，只有我们自己的答案。
+          </p>
+        </header>
+
+        <div class="games-grid">
+          <!-- ===== 游戏 A：心动抽卡 ===== -->
+          <article class="game-card draw-card reveal">
+            <header class="game-head">
+              <span class="game-tag">GAME 01</span>
+              <h3>心动抽卡</h3>
+              <p>每一次翻开，都是今天想说给你听的话。</p>
+            </header>
+
+            <!-- 整张卡都可以点击；3D 翻转动画由 CSS 完成 -->
+            <div class="quote-card" id="quoteCard" role="button" tabindex="0" aria-label="抽取一句随机情话">
+              <div class="quote-inner">
+                <!-- 正面：未抽卡时的卡背 -->
+                <div class="quote-face quote-back">
+                  <span class="quote-seal" aria-hidden="true">♡</span>
+                  <p>轻触 · 抽取今日心动词</p>
+                  <span class="quote-back-sub">A LITTLE LOVE NOTE</span>
+                </div>
+                <!-- 背面：抽出的情话（内容由 JS 写入） -->
+                <div class="quote-face quote-front">
+                  <span class="quote-mark" aria-hidden="true">“</span>
+                  <p class="quote-text" id="quoteText">你是我认真生活的原因之一，认真且不费力。</p>
+                  <span class="quote-no" id="quoteNo">NO. 01</span>
+                </div>
+              </div>
+            </div>
+
+            <footer class="game-foot">
+              <span id="drawCount">已经抽了 0 次</span>
+              <button type="button" class="btn btn-ghost" id="drawAgain">再抽一张</button>
+            </footer>
+          </article>
+
+          <!-- ===== 游戏 B：默契大考验 ===== -->
+          <article class="game-card quiz-card reveal">
+            <header class="game-head">
+              <span class="game-tag">GAME 02</span>
+              <h3>默契大考验</h3>
+              <p>5 道小题，测测我们到底有多懂彼此。</p>
+            </header>
+
+            <!-- JS 会把题目、选项、结果都渲染进这个容器 -->
+            <div class="quiz-body" id="quizBody"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         板块 4 · 留言板
+         留言保存在浏览器 localStorage 中，不上传网络
+         清空浏览器数据 / 换设备 不会同步，请留意提示
+         ======================================================== -->
+    <section class="section section-messages" id="messages">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span class="index-num">04</span> / NOTES</p>
+          <h2>想说的话，<em>留在这里</em></h2>
+          <p class="section-lede">
+            有些话不必等一个特别的日子。写下来，它会留在这台设备上，
+            等下一次打开，再轻轻读一遍。
+          </p>
+        </header>
+
+        <div class="messages-grid">
+          <aside class="message-intro reveal">
+            <p class="message-quote">“我们不必每天都说很多话，<br>但希望每一句，都被好好收着。”</p>
+            <ul class="message-tips">
+              <li><span aria-hidden="true">✎</span> 可以写给对方，也可以写给自己</li>
+              <li><span aria-hidden="true">♡</span> 写完后会立刻出现在右侧</li>
+              <li><span aria-hidden="true">⌂</span> 只保存在当前浏览器，不会上传云端</li>
+            </ul>
+          </aside>
+
+          <div class="message-board reveal">
+            <!-- 留言表单：昵称可留空，内容最多 200 字 -->
+            <form class="message-form" id="messageForm" autocomplete="off">
+              <div class="form-row">
+                <label class="sr-only" for="messageName">署名</label>
+                <input type="text" id="messageName" maxlength="12" placeholder="署名（可不填）">
+              </div>
+              <label class="sr-only" for="messageText">留言内容</label>
+              <textarea id="messageText" maxlength="200" rows="4" placeholder="写一句想留给 TA 的话……" required></textarea>
+              <div class="form-foot">
+                <div class="form-meta">
+                  <p class="privacy-note"><span aria-hidden="true">◌</span> 仅保存在本机浏览器</p>
+                  <span class="char-count" id="messageCount">0 / 200</span>
+                </div>
+                <button type="submit" class="btn btn-primary">放进留言盒</button>
+              </div>
+            </form>
+
+            <!-- 历史留言列表 -->
+            <div class="message-list" id="messageList" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================
+       页脚：藏了两个小彩蛋
+       ① “有一封只写给你的信” → 输入密码解锁隐藏信 / 视频
+       ② 最右边的小爱心，快速点 7 下 → 出现隐藏情话
+       ======================================================== -->
+  <footer class="site-footer">
+    <div class="footer-glow" aria-hidden="true"></div>
+    <div class="footer-inner">
+      <p class="footer-mark" aria-hidden="true">♥</p>
+      <p class="footer-line">把普通的日子，过成<em>很长很长的故事</em>。</p>
+      <p class="footer-meta">
+        <span id="footerNames">阿星 &amp; 小满</span>
+        <span class="dot-sep" aria-hidden="true">·</span>
+        <span id="footerDays">第 1 天</span>
+        <span class="dot-sep" aria-hidden="true">·</span>
+        <span id="footerYear">2026</span>
+      </p>
+
+      <p class="hidden-note" id="hiddenNote" hidden>今天也偷偷多爱你一点。这是只有点满七下的人才能看到的话。</p>
+
+      <div class="footer-actions">
+        <button type="button" class="secret-link" id="secretEntry">
+          <span class="lock-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2M5 10h14v11H5z"/><circle cx="12" cy="15.5" r="1.6"/></svg>
+          </span>
+          有一封只写给你的信
+        </button>
+        <button type="button" class="hidden-heart" id="hiddenHeart" aria-label="一个不太明显的小爱心">♡</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 返回顶部：滚动一段距离后出现 -->
+  <button type="button" class="back-to-top" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+  </button>
+
+  <!-- ========================================================
+       弹层 1 · 密码信 / 隐藏视频
+       密码在 CONFIG.secretPassword 修改（仅用于制造惊喜，不是真正的加密）
+       ======================================================== -->
+  <div class="modal" id="letterModal" role="dialog" aria-modal="true" aria-labelledby="letterTitle" aria-hidden="true">
+    <div class="modal-backdrop" data-close="letterModal"></div>
+    <div class="modal-panel letter-panel">
+      <button type="button" class="modal-close" data-close="letterModal" aria-label="关闭">×</button>
+
+      <!-- 上锁状态 -->
+      <div id="lockPanel">
+        <p class="eyebrow">A LETTER FOR YOU</p>
+        <h3 class="modal-title">这里有一把小小的锁</h3>
+        <p class="modal-desc">这封信只写给一个人。输入我们之间的那串数字，它就会打开。</p>
+        <form id="unlockForm" autocomplete="off">
+          <label class="sr-only" for="secretInput">专属密码</label>
+          <input type="password" id="secretInput" class="secret-input" inputmode="numeric" placeholder="输入我们的密码" maxlength="20">
+          <button type="submit" class="btn btn-primary btn-block">打开这封信</button>
+        </form>
+        <!-- 答题解锁：在 ⚙ 设置里选择这种模式后，答对默契题才能打开信 -->
+        <div id="quizLock" hidden>
+          <p class="modal-desc">回答几件只有我们知道的小事，这封信就会打开。</p>
+          <div id="quizLockBody"></div>
+        </div>
+        <p class="form-error" id="lockError" role="alert"></p>
+      </div>
+
+      <!-- 解锁后的信 -->
+      <div id="letterPanel" hidden>
+        <p class="eyebrow">SEALED WITH LOVE</p>
+        <h3 class="modal-title" id="letterTitle">写给正在读这封信的你</h3>
+        <div class="letter-body" id="letterBody"></div>
+        <p class="letter-sign" id="letterSign">—— 阿星</p>
+
+        <!-- 隐藏视频：点按钮才加载，避免没放视频时出现黑框 -->
+        <div class="letter-video" id="letterVideoWrap" hidden>
+          <div class="video-intro">
+            <span>信的后面，还藏着一段影像。</span>
+            <button type="button" class="btn btn-ghost" id="playSecretVideo">播放隐藏视频</button>
+          </div>
+          <div class="video-tools">
+            <label class="btn btn-ghost" id="uploadSecretVideo" for="videoFileInput" role="button" tabindex="0">上传视频</label>
+            <button type="button" class="btn btn-ghost" id="restoreSecretVideo" hidden>用默认视频</button>
+            <span class="video-source-note" id="videoSourceNote">视频只保存在这台设备，不会上传。</span>
+          </div>
+          <video id="secretVideo" controls playsinline preload="none" hidden></video>
+          <p class="video-fallback" id="videoFallback" hidden>
+            没找到视频。把你们的视频命名为 <code>secret.mp4</code>，
+            放进 <code>assets/video/</code> 文件夹，再刷新页面就好。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       弹层 2 · 生日彩蛋（到生日当天自动弹出）
+       生日日期在 CONFIG.birthday 填写，格式 "MM-DD" 或 "YYYY-MM-DD"
+       ======================================================== -->
+  <div class="modal" id="birthdayModal" role="dialog" aria-modal="true" aria-labelledby="birthdayTitle" aria-hidden="true">
+    <div class="modal-backdrop" data-close="birthdayModal"></div>
+    <div class="modal-panel birthday-panel">
+      <button type="button" class="modal-close" data-close="birthdayModal" aria-label="关闭">×</button>
+      <div class="cake" aria-hidden="true">
+        <svg viewBox="0 0 200 160">
+          <ellipse cx="100" cy="145" rx="64" ry="8" fill="rgba(0,0,0,.12)"/>
+          <path d="M38 94h124v34a14 14 0 0 1-14 14H52a14 14 0 0 1-14-14Z" fill="#f3c9c9"/>
+          <path d="M38 94c14 10 24-8 38 2s24-8 38 2 22-10 34-2l14 8v10H38Z" fill="#f9e4e2"/>
+          <path d="M50 60h100v26a14 14 0 0 1-14 14H64a14 14 0 0 1-14-14Z" fill="#efb6b9"/>
+          <path d="M50 60c12 10 22-6 34 3s22-8 34 2 20-8 32 1v9H50Z" fill="#fbe8e5"/>
+          <g stroke="#9a6a57" stroke-width="3" stroke-linecap="round">
+            <path d="M75 58V30M100 58V22M125 58V30"/>
+          </g>
+          <g fill="#ffbf69">
+            <ellipse cx="75" cy="27" rx="4" ry="8"/><ellipse cx="100" cy="19" rx="4" ry="8"/><ellipse cx="125" cy="27" rx="4" ry="8"/>
+          </g>
+          <g fill="#d98b98">
+            <circle cx="62" cy="78" r="3"/><circle cx="86" cy="84" r="2.4"/><circle cx="118" cy="78" r="2.6"/><circle cx="140" cy="86" r="2.2"/>
+          </g>
+        </svg>
+      </div>
+      <p class="eyebrow">HAPPY BIRTHDAY</p>
+      <h3 class="modal-title" id="birthdayTitle">生日快乐，我最喜欢的人</h3>
+      <p class="modal-desc" id="birthdayBody">今天世界又多爱你了一年，而我也一样。</p>
+      <button type="button" class="btn btn-primary btn-block" data-close="birthdayModal">收下这句祝福</button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       大图查看器：点击照片打开，支持 ← →、Esc、手机左右滑
+       ======================================================== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="照片查看器" aria-hidden="true">
+    <button type="button" class="lightbox-close" id="lightboxClose" aria-label="关闭大图">×</button>
+    <button type="button" class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="上一张">‹</button>
+    <div class="lightbox-actions" role="group" aria-label="照片操作">
+      <label class="lightbox-action" id="lightboxReplace" for="photoFileInput" role="button" tabindex="0">换一张</label>
+      <button type="button" class="lightbox-action lightbox-action-quiet" id="lightboxRestore" hidden>还原默认</button>
+    </div>
+    <figure class="lightbox-figure">
+      <img id="lightboxImg" src="" alt="">
+      <figcaption class="lightbox-caption">
+        <span id="lightboxCaption"></span>
+        <span class="lightbox-meta" id="lightboxMeta"></span>
+      </figcaption>
+    </figure>
+    <button type="button" class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="下一张">›</button>
+    <p class="lightbox-count" id="lightboxCount">01 / 20</p>
+  </div>
+
+  <!-- 全局小提示条：抽卡、密码错误、音乐缺失等都会用到 -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- ========================================================
+       ⚙ 设置面板：不改一行代码，就能把模板变成「你们的」
+       六个标签页：我们 / 照片 / 时间线 / 默契题 / 信 / 备份
+       ======================================================== -->
+  <div class="modal settings-modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" aria-hidden="true">
+    <div class="modal-backdrop" data-close="settingsModal"></div>
+    <div class="modal-panel settings-panel">
+      <button type="button" class="modal-close" data-close="settingsModal" aria-label="关闭">×</button>
+      <p class="eyebrow">MAKE IT OURS</p>
+      <h3 class="modal-title" id="settingsTitle">把它变成「你们的」</h3>
+
+      <div class="settings-tabs" role="tablist" aria-label="设置分类">
+        <button type="button" class="settings-tab is-active" data-tab="us" role="tab" aria-selected="true">我们</button>
+        <button type="button" class="settings-tab" data-tab="photos" role="tab" aria-selected="false">照片</button>
+        <button type="button" class="settings-tab" data-tab="timeline" role="tab" aria-selected="false">时间线</button>
+        <button type="button" class="settings-tab" data-tab="quiz" role="tab" aria-selected="false">默契题</button>
+        <button type="button" class="settings-tab" data-tab="letter" role="tab" aria-selected="false">信</button>
+        <button type="button" class="settings-tab" data-tab="data" role="tab" aria-selected="false">备份</button>
+      </div>
+
+      <div class="settings-body" id="settingsBody"></div>
+
+      <footer class="settings-foot">
+        <span class="settings-hint">只保存在这台设备的浏览器里，不会上传到任何地方</span>
+        <button type="button" class="btn btn-primary" id="settingsSave">保存并应用</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- 备份导入用的隐藏选择框：保留键盘可达性，只做视觉隐藏 -->
+  <input type="file" id="importInput" accept="application/json,text/json,text/plain,.json,.txt" class="sr-only">
+
+  <!-- 手机端上传用的固定文件选择框：用 label 原生触发，避免动态 input.click() 被拦截 -->
+  <input type="file" id="photoFileInput" accept="image/*" class="sr-only">
+  <input type="file" id="coverFileInput" accept="image/*" class="sr-only">
+  <input type="file" id="videoFileInput" accept="video/*" class="sr-only">
+
+  <!-- 首次访问的小引导：改完一次就不再出现 -->
+  <div class="setup-guide" id="hintBanner" hidden>
+    <div class="setup-guide-main">
+      <span class="setup-guide-spark" aria-hidden="true">✦</span>
+      <div class="setup-guide-text">
+        <strong>这是你们的模板</strong>
+        <span>改名字、换照片、写题目，都不用碰代码。</span>
+      </div>
+    </div>
+    <div class="setup-guide-actions">
+      <button type="button" id="hintOpen">开始设置</button>
+      <button type="button" id="hintClose" aria-label="关闭提示">×</button>
+    </div>
+  </div>
+
+  <!-- 没有 JS 时也能看到基本的提示 -->
+  <noscript>
+    <p class="noscript">这个页面需要开启 JavaScript 才能看到照片墙、倒计时和小游戏。请在浏览器设置中允许 JavaScript。</p>
+  </noscript>
+
+  <!-- 所有逻辑集中在 main.js，按功能分段并有中文注释 -->
+  <script src="js/main.js"></script>
+</body>
+</html>

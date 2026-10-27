@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="s21" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fdeef0"/><stop offset="100%" stop-color="#f6c9cf"/>
+    </linearGradient>
+    <linearGradient id="g21" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e3a4ae"/><stop offset="100%" stop-color="#8d5f6d"/>
+    </linearGradient>
+    <radialGradient id="o21" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff3df" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#fff3df" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="n21"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".05"/></feComponentTransfer></filter>
+    <filter id="b21" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#s21)"/>
+  <circle cx="560" cy="170" r="110" fill="url(#o21)"/><circle cx="560" cy="170" r="58" fill="#fff3df" opacity=".92"/>
+  <path d="M0 430 C 180 400 320 430 480 425 C 620 420 720 435 800 428 V600 H0 Z" fill="url(#g21)"/>
+  <g stroke="#fff3df" stroke-width="4" stroke-linecap="round" opacity=".55">
+    <path d="M140 470h90M300 500h120M520 480h100M220 540h130"/></g>
+  <rect width="800" height="600" filter="url(#n21)"/>
+</svg>

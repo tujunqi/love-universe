@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <defs>
+    <linearGradient id="sky-v7" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e9e6df"/><stop offset="60%" stop-color="#cbc2b2"/><stop offset="100%" stop-color="#938875"/>
+    </linearGradient>
+    <radialGradient id="glow-v7"><stop offset="0%" stop-color="#fff7e8" stop-opacity=".9"/><stop offset="100%" stop-color="#fff7e8" stop-opacity="0"/></radialGradient>
+    <filter id="blur-v7"><feGaussianBlur stdDeviation="20"/></filter>
+    <filter id="grain-v7">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".05"/></feComponentTransfer>
+    </filter>
+    <!-- 场景里引用的是通用 id，这里用 CSS 变量式替换不方便，故简单重复定义 -->
+    <linearGradient id="sky-v7-scene" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e9e6df"/><stop offset="60%" stop-color="#cbc2b2"/><stop offset="100%" stop-color="#938875"/></linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="#e9e6df"/>
+  <g>
+    <rect width="1200" height="900" fill="#e9e6df"/>
+    <rect x="192" y="108" width="816.0000000000001" height="648" rx="420" fill="url(#sky-v7)"/>
+    <path d="M192 522 Q 480 450 600 540 T 1008 504.00000000000006 V756 H192 Z" fill="#938875" opacity=".45"/>
+    <path d="M600 108 V756" stroke="#e9e6df" stroke-width="6" opacity=".8"/>
+    <path d="M192 414 H1008" stroke="#e9e6df" stroke-width="5" opacity=".7"/>
+    <path d="M264 756 q264 -225 600 0" fill="none" stroke="#5c5446" stroke-width="3" opacity=".4"/>
+    <g fill="#5c5446" opacity=".55">
+      <circle cx="792" cy="675" r="33.6"/>
+      <path d="M750 702 q42.00000000000001 -31.500000000000004 84.00000000000001 0 l14.4 90 h-112.8 Z"/>
+    </g></g>
+  <rect width="1200" height="900" filter="url(#grain-v7)" opacity=".7"/>
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <text x="84.00000000000001" y="810" font-size="21.599999999999998" letter-spacing="6" fill="#fff" opacity=".55">OUR MOMENT · 07</text>
+    <text x="84.00000000000001" y="846" font-size="13.2" letter-spacing="2" fill="#fff" opacity=".38">替换成你们的照片</text>
+  </g>
+</svg>

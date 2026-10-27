@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  我们的私人博物馆 · 离线版
+  ------------------------------------------------------------
+  ★ 双击本文件即可参观，不需要联网。
+  ★ 想换照片 / 视频 / 语音 / 回忆录：
+      打开同目录下的 museum.js，改最上面的 MUSEUM 配置。
+  ★ 想换颜色：打开 museum.css，改 :root 里的变量。
+  ★ 本文件的结构不建议大改；改文字可以搜索中文。
+  ============================================================
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0c0a0e">
+  <meta name="robots" content="noindex, nofollow">
+  <title>我们的私人博物馆 · 离线纪念宇宙</title>
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="museum.css">
+</head>
+<body class="is-booting">
+
+  <!-- 空气中的微尘，纯装饰，不影响阅读 -->
+  <canvas class="dust" id="dustCanvas" aria-hidden="true"></canvas>
+  <div class="ambient" aria-hidden="true"></div>
+
+  <!-- ========================================================
+       开馆封面
+       ======================================================== -->
+  <div class="boot" id="boot">
+    <div class="boot-photo" id="bootPhoto"></div>
+    <div class="boot-shade"></div>
+    <div class="boot-frame">
+      <div class="boot-top">
+        <span id="bootKicker">OUR PRIVATE MUSEUM</span>
+        <span id="bootEst">EST. 2023.05.20</span>
+      </div>
+
+      <div class="boot-center">
+        <p class="boot-eyebrow">PRIVATE COLLECTION · NO. 0520</p>
+        <h1 class="boot-title" id="bootTitle">我们的私人博物馆</h1>
+        <p class="boot-subtitle" id="bootSubtitle">仅接待两位观众</p>
+        <p class="boot-note" id="bootNote">请轻推门 · 馆内禁止赶时间</p>
+        <button class="boot-enter" id="enterMuseum" type="button">
+          <span id="bootEnterText">推门进入</span>
+          <i aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="boot-bottom">
+        <span>离线运行 · 不联网 · 不收集任何信息</span>
+        <span id="bootDate"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       博物馆主体
+       ======================================================== -->
+  <div class="museum" id="museum" aria-hidden="true">
+
+    <header class="topbar" id="topbar">
+      <a class="brand" href="#hall" aria-label="回到序厅">
+        <span class="brand-mark" id="brandMe">阿</span>
+        <span class="brand-cross" aria-hidden="true">×</span>
+        <span class="brand-mark" id="brandPartner">小</span>
+        <span class="brand-text">
+          <b id="brandTitle">我们的私人博物馆</b>
+          <small>OFFLINE EDITION</small>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="展厅导航">
+        <a href="#hall" class="nav-link is-active">序厅</a>
+        <a href="#gallery" class="nav-link">照片</a>
+        <a href="#screen" class="nav-link">影音</a>
+        <a href="#memoirs" class="nav-link">回忆录</a>
+        <a href="#capsule" class="nav-link">时间胶囊</a>
+        <a href="#guide" class="nav-link">指南</a>
+      </nav>
+
+      <div class="top-actions">
+        <button class="icon-btn music-btn" id="musicToggle" type="button" aria-pressed="false" aria-label="播放背景音乐" title="播放背景音乐">
+          <span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+        </button>
+        <button class="icon-btn" id="guideButton" type="button" aria-label="打开参观指南" title="参观指南">?</button>
+        <button class="icon-btn menu-btn" id="menuButton" type="button" aria-label="打开导航" aria-expanded="false">≡</button>
+      </div>
+    </header>
+
+    <div class="scroll-line" aria-hidden="true"><i id="scrollProgress"></i></div>
+
+    <main>
+
+      <!-- ====================================================
+           序厅
+           ==================================================== -->
+      <section class="hall" id="hall">
+        <div class="wrap">
+          <div class="hall-head reveal">
+            <p class="kicker">HALL 00 · 序厅</p>
+            <h1 class="hall-title">
+              把我们的日子，<br>
+              <em>收进一座小小的馆。</em>
+            </h1>
+            <p class="hall-intro" id="hallIntro"></p>
+          </div>
+
+          <div class="hall-stats reveal">
+            <div class="stat">
+              <span class="stat-label">在一起</span>
+              <strong class="stat-number" id="statDays">0</strong>
+              <span class="stat-unit">天</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">馆藏照片</span>
+              <strong class="stat-number" id="statPhotos">0</strong>
+              <span class="stat-unit">张</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">回忆录</span>
+              <strong class="stat-number" id="statChapters">0</strong>
+              <span class="stat-unit">章</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">已经走过</span>
+              <strong class="stat-number" id="statYears">0</strong>
+              <span class="stat-unit">年</span>
+            </div>
+          </div>
+
+          <div class="hall-feature reveal">
+            <figure class="feature-photo">
+              <img id="featurePhoto" alt="镇馆之宝" loading="lazy">
+              <figcaption id="featureCaption">镇馆之宝 · 001</figcaption>
+            </figure>
+            <blockquote class="feature-quote">
+              <p id="featureQuote"></p>
+              <cite id="featureCite">—— 馆长手记</cite>
+            </blockquote>
+          </div>
+
+          <div class="hall-map reveal">
+            <a class="map-card" href="#gallery">
+              <span class="map-no">01</span>
+              <span class="map-title">照片长廊</span>
+              <span class="map-desc">按时间挂起的普通日子</span>
+              <span class="map-go" aria-hidden="true">进入 →</span>
+            </a>
+            <a class="map-card" href="#screen">
+              <span class="map-no">02</span>
+              <span class="map-title">影音室</span>
+              <span class="map-desc">会动、会说话的那部分</span>
+              <span class="map-go" aria-hidden="true">进入 →</span>
+            </a>
+            <a class="map-card" href="#memoirs">
+              <span class="map-no">03</span>
+              <span class="map-title">回忆录</span>
+              <span class="map-desc">把细节写下来，才算真的留下</span>
+              <span class="map-go" aria-hidden="true">进入 →</span>
+            </a>
+            <a class="map-card" href="#capsule">
+              <span class="map-no">04</span>
+              <span class="map-title">时间胶囊</span>
+              <span class="map-desc">写给未来某一天的我们</span>
+              <span class="map-go" aria-hidden="true">进入 →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================
+           照片长廊
+           ==================================================== -->
+      <section class="room" id="gallery">
+        <div class="wrap">
+          <header class="room-head reveal">
+            <span class="room-no">01</span>
+            <div class="room-heading">
+              <p class="kicker">GALLERY · 照片长廊</p>
+              <h2>被光记住的日子</h2>
+              <p class="room-desc">每一张都不是“好看的照片”，是我们确实那样生活过的证据。</p>
+            </div>
+            <span class="room-count" id="galleryCount">00 件藏品</span>
+          </header>
+
+          <div class="filters reveal" id="galleryFilters" role="group" aria-label="按标签筛选照片"></div>
+          <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+      </section>
+
+      <!-- ====================================================
+           影音室
+           ==================================================== -->
+      <section class="room" id="screen">
+        <div class="wrap">
+          <header class="room-head reveal">
+            <span class="room-no">02</span>
+            <div class="room-heading">
+              <p class="kicker">SCREEN &amp; SOUND · 影音室</p>
+              <h2>再听一次那天的声音</h2>
+              <p class="room-desc">影像和语音都放在本地。没有网络，也能重新听见当时。</p>
+            </div>
+          </header>
+
+          <div class="screen-layout">
+            <div class="video-hall reveal">
+              <div class="sub-head">
+                <h3>影像</h3>
+                <span id="videoCount">00 段</span>
+              </div>
+              <div class="video-list" id="videoList"></div>
+              <div class="empty-hall" id="videoEmpty" hidden>
+                <p class="empty-mark" aria-hidden="true">▷</p>
+                <h4>影像厅正在布展</h4>
+                <p>把 MP4 放进 <code>media/videos/</code>，再在 <code>museum.js</code> 的 <code>videos</code> 里写一行，就能在这里播放。</p>
+              </div>
+            </div>
+
+            <aside class="audio-hall reveal">
+              <div class="sub-head">
+                <h3>声音</h3>
+                <span>本馆背景乐</span>
+              </div>
+
+              <div class="music-card">
+                <button class="music-disc" id="musicCardBtn" type="button" aria-label="播放背景音乐">
+                  <span aria-hidden="true">♪</span>
+                </button>
+                <div class="music-info">
+                  <b id="musicTitle">馆内背景音乐</b>
+                  <p id="musicStatus">点击播放 · 音量已调低</p>
+                  <div class="music-track" aria-hidden="true"><i id="musicFill"></i></div>
+                </div>
+              </div>
+
+              <div class="sub-head voice-head">
+                <h3>语音留言</h3>
+                <span id="voiceCount">00 条</span>
+              </div>
+              <div class="voice-list" id="voiceList"></div>
+              <div class="empty-hall small" id="voiceEmpty" hidden>
+                <p>把微信语音导出成 MP3，放进 <code>media/voice/</code>，在 <code>museum.js</code> 里登记，就能在这里一条条听。</p>
+              </div>
+              <p class="audio-note">所有声音只从本机读取，不会上传到任何地方。</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================
+           回忆录
+           ==================================================== -->
+      <section class="room" id="memoirs">
+        <div class="wrap">
+          <header class="room-head reveal">
+            <span class="room-no">03</span>
+            <div class="room-heading">
+              <p class="kicker">MEMOIRS · 回忆录</p>
+              <h2>把细节写下来</h2>
+              <p class="room-desc">照片会褪色，记忆会改写。写下来的那部分，比较不容易走丢。</p>
+            </div>
+            <span class="room-count" id="memoirCount">00 章</span>
+          </header>
+
+          <div class="memoir-layout reveal">
+            <aside class="toc" aria-label="回忆录目录">
+              <p class="toc-title">目录</p>
+              <div id="memoirToc"></div>
+            </aside>
+            <article class="reader" id="reader">
+              <p class="chapter-kicker" id="chapterKicker">CHAPTER 01</p>
+              <h3 id="chapterTitle"></h3>
+              <p class="chapter-meta" id="chapterMeta"></p>
+              <div class="chapter-body" id="chapterBody"></div>
+              <div class="chapter-nav">
+                <button type="button" id="prevChapter">← 上一章</button>
+                <button type="button" id="nextChapter">下一章 →</button>
+              </div>
+            </article>
+          </div>
+
+          <div class="documents reveal">
+            <div class="sub-head">
+              <h3>馆藏文档</h3>
+              <span id="documentCount">00 份</span>
+            </div>
+            <div class="document-list" id="documentList"></div>
+            <p class="doc-note">PDF 通常可以直接打开；Word / Pages 文件会下载，需要电脑上有对应软件。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================
+           时间胶囊
+           ==================================================== -->
+      <section class="room capsule-room" id="capsule">
+        <div class="wrap">
+          <header class="room-head reveal">
+            <span class="room-no">04</span>
+            <div class="room-heading">
+              <p class="kicker">TIME CAPSULE · 时间胶囊</p>
+              <h2>写给未来某一天的我们</h2>
+              <p class="room-desc">它会在约定日期自动打开。在那之前，只显示倒计时。</p>
+            </div>
+          </header>
+
+          <div class="capsule reveal" id="capsuleCard">
+            <div class="capsule-seal" aria-hidden="true"><span>封</span></div>
+            <p class="capsule-kicker">SEALED UNTIL 2035</p>
+            <h3 id="capsuleTitle">十年后，再一起打开</h3>
+            <p class="capsule-intro" id="capsuleIntro"></p>
+
+            <div class="countdown" id="capsuleCountdown" aria-label="距离胶囊开启的倒计时">
+              <div><strong id="capDays">0000</strong><span>天</span></div>
+              <div><strong id="capHours">00</strong><span>时</span></div>
+              <div><strong id="capMins">00</strong><span>分</span></div>
+              <div><strong id="capSecs">00</strong><span>秒</span></div>
+            </div>
+
+            <form class="capsule-form" id="capsuleForm">
+              <label for="capsulePassword">如果等不及，可以提前打开</label>
+              <div class="capsule-input">
+                <input id="capsulePassword" type="password" inputmode="numeric" autocomplete="off" placeholder="输入开启密码">
+                <button type="submit">提前开启</button>
+              </div>
+              <p class="form-error" id="capsuleError" role="alert"></p>
+            </form>
+
+            <div class="capsule-letter" id="capsuleLetter" hidden>
+              <p class="letter-eyebrow">THE LETTER</p>
+              <h4 id="capsuleLetterTitle"></h4>
+              <div id="capsuleLetterBody"></div>
+              <p class="letter-sign" id="capsuleSign"></p>
+            </div>
+
+            <p class="capsule-hint">提示：密码是我们的纪念日，四位数字。前端密码只用于仪式感，不是真正的加密。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================
+           参观指南
+           ==================================================== -->
+      <section class="room guide-room" id="guide">
+        <div class="wrap">
+          <header class="room-head reveal">
+            <span class="room-no">05</span>
+            <div class="room-heading">
+              <p class="kicker">VISITOR GUIDE · 参观指南</p>
+              <h2>给打开这座馆的人</h2>
+              <p class="room-desc">无论你是今天的我们，还是很多年以后偶然打开它的人。</p>
+            </div>
+          </header>
+
+          <div class="guide-grid">
+            <article class="guide-card reveal">
+              <p class="kicker">HOW TO</p>
+              <h3>怎么参观</h3>
+              <p>向下滚动，或使用顶部导航。照片可以点开，用方向键切换；按 <kbd>Esc</kbd> 关闭大图。</p>
+              <p>点击右上角的音乐按钮，可以随时关掉声音。</p>
+            </article>
+
+            <article class="guide-card reveal">
+              <p class="kicker">OFFLINE</p>
+              <h3>它在哪里</h3>
+              <p>整个博物馆都在这个文件夹里，不需要网络，不需要登录，也不会把任何内容上传。</p>
+              <p>如果网页打不开，所有原始照片和视频仍在 <code>media/</code> 里。</p>
+            </article>
+
+            <article class="guide-card reveal">
+              <p class="kicker">PRIVACY</p>
+              <h3>关于隐私</h3>
+              <p>这是本地文件，留言、密码、开启状态只保存在当前浏览器。换一台电脑，需要重新输入密码。</p>
+              <p>请勿把包含身份证、住址、账号密码的内容放进馆内。</p>
+            </article>
+
+            <article class="guide-card reveal">
+              <p class="kicker">FUTURE</p>
+              <h3>几十年后</h3>
+              <p>如果未来的浏览器打不开它，请先换一个浏览器，再试单文件版。照片和视频的原始文件比网页活得更久。</p>
+              <p>至少保留三份备份，并每隔几年迁移一次格式。</p>
+            </article>
+          </div>
+
+          <div class="guide-foot reveal">
+            <div>
+              <p class="kicker">COLOPHON</p>
+              <p>本馆由 <b id="guideMe">阿星</b> 为 <b id="guidePartner">小满</b> 制作。</p>
+              <p class="guide-small" id="guideVersion">离线版 · 2026.10 · 第 1 版</p>
+            </div>
+            <div class="guide-actions">
+              <a class="ghost-btn" href="单文件版/恋爱纪念博物馆-单文件版.html">打开单文件版</a>
+              <button class="ghost-btn" type="button" id="backToTop">回到序厅</button>
+            </div>
+          </div>
+
+          <p class="guide-final">愿很多年以后，我们仍然觉得，这些普通的日子值得被收藏。</p>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <p><span id="footerMe">阿星</span> × <span id="footerPartner">小满</span></p>
+        <p id="footerLine">普通日子收藏馆 · 永久闭馆时间未定</p>
+        <p class="footer-small">LOCAL ARCHIVE · NO NETWORK REQUIRED</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ========================================================
+       大图查看器
+       ======================================================== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="照片大图" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="关闭大图">×</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" type="button" aria-label="上一张">‹</button>
+    <figure class="lightbox-figure">
+      <img id="lightboxImage" alt="">
+      <figcaption>
+        <span id="lightboxTitle"></span>
+        <span id="lightboxMeta"></span>
+      </figcaption>
+    </figure>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="下一张">›</button>
+    <p class="lightbox-count" id="lightboxCount"></p>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="museum.js"></script>
+</body>
+</html>

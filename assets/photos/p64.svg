@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="s64" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fdf3e3"/><stop offset="100%" stop-color="#f4d9ae"/>
+    </linearGradient>
+    <linearGradient id="g64" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e2b87e"/><stop offset="100%" stop-color="#8a6440"/>
+    </linearGradient>
+    <radialGradient id="o64" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fffdf5" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#fffdf5" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="n64"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".05"/></feComponentTransfer></filter>
+    <filter id="b64" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#s64)"/>
+  <ellipse cx="400" cy="500" rx="230" ry="26" fill="#8a6440" opacity=".35"/>
+  <g><path d="M280 250h120l-12 220a24 24 0 0 1-24 22h-48a24 24 0 0 1-24-22Z" fill="#fffdf5" opacity=".85"/>
+  <path d="M284 330h112l-8 140a24 24 0 0 1-24 22h-48a24 24 0 0 1-24-22Z" fill="#8a5a3b" opacity=".55"/>
+  <path d="M356 210l30-44" stroke="rgba(60,34,42,.55)" stroke-width="8" stroke-linecap="round"/></g>
+  <g><path d="M420 270h110l-11 200a22 22 0 0 1-22 20h-44a22 22 0 0 1-22-20Z" fill="#e2b87e" opacity=".8"/>
+  <path d="M486 236l26-38" stroke="rgba(60,34,42,.55)" stroke-width="8" stroke-linecap="round"/></g>
+  <g fill="#8a6440"><circle cx="316" cy="470" r="7"/><circle cx="342" cy="452" r="6"/><circle cx="330" cy="484" r="5"/>
+  <circle cx="466" cy="470" r="6"/><circle cx="488" cy="450" r="5"/></g>
+  <rect width="800" height="600" filter="url(#n64)"/>
+</svg>

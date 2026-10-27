@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="sky-v15" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbe3df"/><stop offset="60%" stop-color="#f3b9b4"/><stop offset="100%" stop-color="#c78282"/>
+    </linearGradient>
+    <radialGradient id="glow-v15"><stop offset="0%" stop-color="#fff7e8" stop-opacity=".9"/><stop offset="100%" stop-color="#fff7e8" stop-opacity="0"/></radialGradient>
+    <filter id="blur-v15"><feGaussianBlur stdDeviation="20"/></filter>
+    <filter id="grain-v15">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".05"/></feComponentTransfer>
+    </filter>
+    <!-- 场景里引用的是通用 id，这里用 CSS 变量式替换不方便，故简单重复定义 -->
+    <linearGradient id="sky-v15-scene" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fbe3df"/><stop offset="60%" stop-color="#f3b9b4"/><stop offset="100%" stop-color="#c78282"/></linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="#fbe3df"/>
+  <g>
+    <rect width="1200" height="800" fill="url(#sky-v15)"/>
+    <circle cx="600" cy="240" r="168.00000000000003" fill="url(#glow-v15)" opacity=".7"/>
+    <g fill="#7b4d55" opacity=".35">
+      <rect x="120" y="440.00000000000006" width="168.00000000000003" height="240"/>
+      <rect x="324" y="376" width="120" height="304"/>
+      <rect x="480" y="480" width="216" height="200"/>
+      <rect x="732" y="400" width="144" height="280"/>
+      <rect x="912" y="463.99999999999994" width="180" height="216"/>
+    </g>
+    <g fill="#ffe9bd" opacity=".6">
+      <rect x="156" y="480" width="3" height="4"/><rect x="204.00000000000003" y="520" width="3" height="4"/>
+      <rect x="360" y="424" width="3" height="4"/><rect x="396" y="480" width="3" height="4"/>
+      <rect x="768" y="448.00000000000006" width="3" height="4"/><rect x="816.0000000000001" y="512" width="3" height="4"/>
+      <rect x="960" y="512" width="3" height="4"/><rect x="1008" y="560" width="3" height="4"/>
+    </g>
+    <path d="M0 704 H1200 V800 H0 Z" fill="#7b4d55" opacity=".6"/>
+    <path d="M600 800 V704" stroke="#f7ebd5" stroke-width="3" opacity=".4"/></g>
+  <rect width="1200" height="800" filter="url(#grain-v15)" opacity=".7"/>
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <text x="84.00000000000001" y="720" font-size="21.599999999999998" letter-spacing="6" fill="#fff" opacity=".55">OUR MOMENT · 15</text>
+    <text x="84.00000000000001" y="752" font-size="13.2" letter-spacing="2" fill="#fff" opacity=".38">替换成你们的照片</text>
+  </g>
+</svg>

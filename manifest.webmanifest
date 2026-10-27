@@ -1,0 +1,32 @@
+{
+  "name": "我们的恋爱纪念宇宙",
+  "short_name": "纪念宇宙",
+  "description": "一个只属于我们的恋爱数字纪念宇宙：天数、照片墙、时间线、默契题和一封上锁的信。",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fff8f6",
+  "theme_color": "#fff8f6",
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

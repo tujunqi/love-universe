@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  
+  <defs>
+    <linearGradient id="sky-c2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#070d21"/>
+      <stop offset="55%" stop-color="#17264c"/>
+      <stop offset="100%" stop-color="#3e5680"/>
+    </linearGradient>
+    <radialGradient id="glow-c2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff8ec" stop-opacity=".95"/>
+      <stop offset="45%" stop-color="#ffe6cd" stop-opacity=".45"/>
+      <stop offset="100%" stop-color="#ffe6cd" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hill-c2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3e5680"/>
+      <stop offset="100%" stop-color="#0a1024"/>
+    </linearGradient>
+    <filter id="grain-c2">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".055"/></feComponentTransfer>
+    </filter>
+    <filter id="soft-c2" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky-c2)"/>
+  <circle cx="1130" cy="270" r="190" fill="url(#glow-c2)" opacity=".75"/>
+  <circle cx="1130" cy="270" r="62" fill="#f3ead6"/>
+  <circle cx="1108" cy="252" r="12" fill="#e3d5ba" opacity=".6"/>
+  <circle cx="1150" cy="292" r="8" fill="#e3d5ba" opacity=".5"/>
+  <g fill="#fff">
+    <circle cx="180" cy="150" r="2.4" opacity=".8"/><circle cx="300" cy="260" r="1.6" opacity=".55"/>
+    <circle cx="460" cy="120" r="2" opacity=".7"/><circle cx="620" cy="310" r="1.4" opacity=".5"/>
+    <circle cx="780" cy="170" r="2.2" opacity=".75"/><circle cx="940" cy="90" r="1.5" opacity=".6"/>
+    <circle cx="1320" cy="140" r="2" opacity=".7"/><circle cx="1440" cy="330" r="1.6" opacity=".5"/>
+    <circle cx="150" cy="420" r="1.5" opacity=".45"/><circle cx="520" cy="60" r="1.2" opacity=".55"/>
+    <circle cx="1230" cy="460" r="1.8" opacity=".55"/><circle cx="1050" cy="520" r="1.2" opacity=".4"/>
+  </g>
+  <path d="M0 610 H1600 V1000 H0 Z" fill="#0c1730"/>
+  <path d="M0 610 C 300 596 500 624 800 614 C 1100 604 1300 592 1600 618 V700 H0 Z" fill="#12203f"/>
+  <g opacity=".3" stroke="#d9e2ff" stroke-linecap="round">
+    <path d="M1010 660 h210" stroke-width="2"/><path d="M1060 692 h120" stroke-width="1.5"/>
+    <path d="M980 724 h280" stroke-width="2"/><path d="M1080 756 h90" stroke-width="1.2"/>
+    <path d="M1030 792 h170" stroke-width="1.6"/>
+  </g>
+  <path d="M0 880 C 250 830 380 900 640 905 C 940 910 1230 850 1600 900 V1000 H0 Z" fill="#070d20"/>
+  <g fill="#060b19">
+    <circle cx="1240" cy="770" r="16"/>
+    <path d="M1224 790 q16 -18 32 0 l6 56 h-44 Z"/>
+    <path d="M1232 846 l-8 66 h8 l13 -57 l13 57 h8 l-8 -66 Z"/>
+    <circle cx="1280" cy="784" r="13"/>
+    <path d="M1268 800 q12 -14 24 0 l5 46 h-34 Z"/>
+    <path d="M1273 846 l-6 50 h7 l9 -43 l9 43 h7 l-6 -50 Z"/>
+    <path d="M1256 806 q26 12 46 -2" stroke="#060b19" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </g>
+  <circle cx="150" cy="840" r="2" fill="#fff" opacity=".8"/>
+  <circle cx="210" cy="880" r="1.4" fill="#fff" opacity=".6"/>
+  <rect width="1600" height="1000" filter="url(#grain-c2)" opacity=".8"/>
+</svg>

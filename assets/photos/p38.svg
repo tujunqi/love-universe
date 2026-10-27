@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="s38" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8f1fb"/><stop offset="100%" stop-color="#bcd7f2"/>
+    </linearGradient>
+    <linearGradient id="g38" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8fb3dd"/><stop offset="100%" stop-color="#4a5f8a"/>
+    </linearGradient>
+    <radialGradient id="o38" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff8e6" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#fff8e6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="n38"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".05"/></feComponentTransfer></filter>
+    <filter id="b38" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#s38)"/>
+  <ellipse cx="400" cy="480" rx="240" ry="24" fill="#4a5f8a" opacity=".3"/>
+  <g fill="#4a5f8a">
+    <path d="M300 470c-6-60 24-100 74-100s80 40 74 100c-2 22-18 34-38 34h-72c-20 0-36-12-38-34Z"/>
+    <path d="M330 380l-16-40 36 16ZM446 380l16-40-36 16Z"/>
+    <circle cx="356" cy="416" r="7" fill="#fff8e6"/><circle cx="416" cy="416" r="7" fill="#fff8e6"/>
+    <path d="M378 438c8 8 16 8 22 0" stroke="#fff8e6" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M452 440c26-8 44-4 56 10" stroke="#4a5f8a" stroke-width="12" fill="none" stroke-linecap="round"/></g>
+  <circle cx="400" cy="180" r="90" fill="url(#o38)"/><circle cx="400" cy="180" r="46" fill="#fff8e6" opacity=".85"/>
+  <rect width="800" height="600" filter="url(#n38)"/>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200">
+  <defs>
+    <linearGradient id="sky-v1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbe3df"/><stop offset="60%" stop-color="#f3b9b4"/><stop offset="100%" stop-color="#c78282"/>
+    </linearGradient>
+    <radialGradient id="glow-v1"><stop offset="0%" stop-color="#fff7e8" stop-opacity=".9"/><stop offset="100%" stop-color="#fff7e8" stop-opacity="0"/></radialGradient>
+    <filter id="blur-v1"><feGaussianBlur stdDeviation="20"/></filter>
+    <filter id="grain-v1">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".05"/></feComponentTransfer>
+    </filter>
+    <!-- 场景里引用的是通用 id，这里用 CSS 变量式替换不方便，故简单重复定义 -->
+    <linearGradient id="sky-v1-scene" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fbe3df"/><stop offset="60%" stop-color="#f3b9b4"/><stop offset="100%" stop-color="#c78282"/></linearGradient>
+  </defs>
+  <rect width="900" height="1200" fill="#fbe3df"/>
+  <g>
+    <rect width="900" height="1200" fill="url(#sky-v1)"/>
+    <circle cx="648" cy="360" r="117" fill="url(#glow-v1)"/>
+    <circle cx="648" cy="360" r="49.5" fill="#fff6e6" opacity=".9"/>
+    <path d="M0 744 H900 V1200 H0 Z" fill="#c78282" opacity=".38"/>
+    <path d="M0 840 Q 252.00000000000003 792 495.00000000000006 864 T 900 827.9999999999999 V1200 H0 Z" fill="#7b4d55" opacity=".5"/>
+    <g stroke="#fff" opacity=".28" stroke-linecap="round">
+      <path d="M558 936 h180" stroke-width="2"/>
+      <path d="M612 996 h108" stroke-width="1.5"/>
+    </g>
+    <path d="M0 1116 C 270 1056 540 1152 900 1080 V1200 H0 Z" fill="#3f2b33" opacity=".55"/></g>
+  <rect width="900" height="1200" filter="url(#grain-v1)" opacity=".7"/>
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <text x="63.00000000000001" y="1080" font-size="16.2" letter-spacing="6" fill="#fff" opacity=".55">OUR MOMENT · 01</text>
+    <text x="63.00000000000001" y="1128" font-size="10" letter-spacing="2" fill="#fff" opacity=".38">替换成你们的照片</text>
+  </g>
+</svg>
